@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HealthSphere - Backend Assignment</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f3f4f6;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 40px 50px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #1a56db;
+            text-align: center;
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+
+        .intro-text {
+            font-size: 15px;
+            margin-bottom: 30px;
+            color: #4b5563;
+        }
+
+        h2 {
+            color: #1a56db;
+            font-size: 22px;
+            border-bottom: 2px solid #1a56db;
+            padding-bottom: 10px;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+
+        h3 {
+            color: #1f2937;
+            font-size: 17px;
+            margin-bottom: 10px;
+            margin-top: 0;
+        }
+
+        h4.api-group-title {
+            color: #111827;
+            font-size: 19px;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            border-left: 4px solid #10b981;
+            padding-left: 10px;
+        }
+
+        /* Ikki ustunli tarmoq grid uchun */
+        .grid-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px 40px;
+        }
+
+        .entity-box {
+            margin-bottom: 10px;
+        }
+
+        ul {
+            list-style-type: disc;
+            padding-left: 20px;
+            margin-top: 5px;
+        }
+
+        li {
+            font-size: 14.5px;
+            margin-bottom: 6px;
+        }
+
+        /* Kod ko'rinishidagi shrift dizayni */
+        code {
+            font-family: Consolas, "Courier New", monospace;
+            color: #0256d4;
+            background-color: #f0f4f8;
+            padding: 2px 5px;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        /* API Endpointlar qismi uchun dizayn */
+        .api-method {
+            font-weight: bold;
+            padding: 4px 8px;
+            border-radius: 4px;
+            color: white;
+            font-size: 13px;
+            margin-right: 10px;
+        }
+        .method-get { background-color: #10b981; }
+        .method-post { background-color: #3b82f6; }
+        .method-put { background-color: #f59e0b; }
+
+        .api-box {
+            background-color: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-left: 4px solid #1a56db;
+            padding: 15px 20px;
+            margin-bottom: 15px;
+            border-radius: 4px;
+        }
+
+        .api-box h4 {
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 16px;
+            color: #111827;
+        }
+
+        .api-box p {
+            margin: 5px 0;
+            font-size: 14.5px;
+        }
+
+        .challenge-box {
+            background-color: #fffbeb;
+            border-left: 4px solid #f59e0b;
+            padding: 20px;
+            margin-top: 30px;
+            border-radius: 4px;
+        }
+
+        /* Telefonlar uchun responsiv dizayn */
+        @media (max-width: 768px) {
+            .grid-container {
+                grid-template-columns: 1fr;
+            }
+            .container {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Backend Assignment: "HealthSphere" — Zamonaviy Klinika Tizimi</h1>
+
+    <div class="intro-text">
+        Ushbu loyiha orqali siz <strong>Spring Boot, REST API, Spring Security, JPA/Hibernate, Concurrency (bir vaqtda yozishni oldini olish)</strong> va <strong>Transaction Management</strong> bo'yicha bilimlaringizni yuqori darajaga ko'tarasiz.<br><br>
+        Siz ko'p tarmoqli klinika uchun shifokorlar qabuli, bemorlar tarixi, dorixona zaxirasi va to'lov tizimini o'z ichiga olgan murakkab backend yaratishingiz kerak.
+    </div>
+
+    <h2>1. Tizim Arxitekturasi va Entity'lar</h2>
+
+    <div class="grid-container">
+        <!-- 1. User -->
+        <div class="entity-box">
+            <h3>1. User (Asosiy foydalanuvchi)</h3>
+            <ul>
+                <li><code>id</code> (Long)</li>
+                <li><code>phoneNumber</code> (String, unique - login uchun)</li>
+                <li><code>email</code> (String, unique)</li>
+                <li><code>password</code> (String, hashed)</li>
+                <li><code>role</code> (Enum: ADMIN, DOCTOR, PATIENT, RECEPTIONIST, PHARMACIST)</li>
+                <li><code>isActive</code> (Boolean)</li>
+            </ul>
+        </div>
+
+        <!-- 2. Patient Profile -->
+        <div class="entity-box">
+            <h3>2. Patient Profile (Bemor ma'lumotlari)</h3>
+            <ul>
+                <li><code>id</code> (Long)</li>
+                <li><code>user</code> (@OneToOne)</li>
+                <li><code>fullName</code> (String)</li>
+                <li><code>dateOfBirth</code> (LocalDate)</li>
+                <li><code>bloodGroup</code> (Enum: A_POS, B_NEG, etc.)</li>
+                <li><code>allergies</code> (String)</li>
+            </ul>
+        </div>
+
+        <!-- 3. Doctor Profile -->
+        <div class="entity-box">
+            <h3>3. Doctor Profile (Shifokor ma'lumotlari)</h3>
+            <ul>
+                <li><code>id</code> (Long)</li>
+                <li><code>user</code> (@OneToOne)</li>
+                <li><code>fullName</code> (String)</li>
+                <li><code>specialization</code> (@ManyToOne Specialization)</li>
+                <li><code>experienceYears</code> (Integer)</li>
+                <li><code>consultationFee</code> (BigDecimal) - <i>Ko'rik narxi</i></li>
+                <li><code>roomNumber</code> (String)</li>
+            </ul>
+        </div>
+
+        <!-- 4. Specialization -->
+        <div class="entity-box">
+            <h3>4. Specialization (Yo'nalishlar)</h3>
+            <ul>
+                <li><code>id</code> (Long)</li>
+                <li><code>name</code> (String) - <i>Kardiolog, Nevrolog va hk.</i></li>
+                <li><code>description</code> (String)</li>
+            </ul>
+        </div>
+
+        <!-- 5. DoctorSchedule -->
+        <div class="entity-box">
+            <h3>5. DoctorSchedule (Shifokor ish grafigi)</h3>
+            <ul>
+                <li><code>id</code> (Long)</li>
+                <li><code>doctor</code> (@ManyToOne)</li>
+                <li><code>dayOfWeek</code> (Enum: MONDAY...SUNDAY)</li>
+                <li><code>startTime</code> (LocalTime)</li>
+                <li><code>endTime</code> (LocalTime)</li>
+                <li><code>slotDuration</code> (Integer) - <i>Bemorga ajratiladigan vaqt (minut)</i></li>
+            </ul>
+        </div>
+
+        <!-- 6. Appointment -->
+        <div class="entity-box">
+            <h3>6. Appointment (Qabul/Band qilish)</h3>
+            <ul>
+                <li><code>id</code> (Long)</li>
+                <li><code>patient</code> (@ManyToOne)</li>
+                <li><code>doctor</code> (@ManyToOne)</li>
+                <li><code>appointmentDate</code> (LocalDate)</li>
+                <li><code>startTime</code> (LocalTime)</li>
+                <li><code>endTime</code> (LocalTime)</li>
+                <li><code>status</code> (Enum: PENDING, CONFIRMED, CANCELLED, COMPLETED)</li>
+                <li><code>symptoms</code> (String)</li>
+            </ul>
+        </div>
+
+        <!-- 7. MedicalRecord -->
+        <div class="entity-box">
+            <h3>7. MedicalRecord (Tibbiy karta/Tarix)</h3>
+            <ul>
+                <li><code>id</code> (Long)</li>
+                <li><code>appointment</code> (@OneToOne) - <i>Qaysi qabul asosida ochilgan</i></li>
+                <li><code>diagnosis</code> (String) - <i>Tashxis</i></li>
+                <li><code>notes</code> (String) - <i>Shifokor xulosasi</i></li>
+                <li><code>createdAt</code> (LocalDateTime)</li>
+            </ul>
+        </div>
+
+        <!-- 8. Medicine -->
+        <div class="entity-box">
+            <h3>8. Medicine (Dori vositalari - Dorixona)</h3>
+            <ul>
+                <li><code>id</code> (Long)</li>
+                <li><code>name</code> (String)</li>
+                <li><code>manufacturer</code> (String)</li>
+                <li><code>price</code> (BigDecimal)</li>
+                <li><code>stockQuantity</code> (Integer) - <i>Ombordagi soni</i></li>
+            </ul>
+        </div>
+
+        <!-- 9. Prescription -->
+        <div class="entity-box">
+            <h3>9. Prescription (Retsept)</h3>
+            <ul>
+                <li><code>id</code> (Long)</li>
+                <li><code>medicalRecord</code> (@ManyToOne)</li>
+                <li><code>medicine</code> (@ManyToOne)</li>
+                <li><code>dosage</code> (String) - <i>Kuniga necha mahal</i></li>
+                <li><code>durationDays</code> (Integer) - <i>Necha kun ichish kerak</i></li>
+            </ul>
+        </div>
+
+        <!-- 10. Invoice -->
+        <div class="entity-box">
+            <h3>10. Invoice (Hisob-faktura)</h3>
+            <ul>
+                <li><code>id</code> (Long)</li>
+                <li><code>patient</code> (@ManyToOne)</li>
+                <li><code>appointment</code> (@OneToOne, nullable)</li>
+                <li><code>totalAmount</code> (BigDecimal)</li>
+                <li><code>status</code> (Enum: UNPAID, PARTIALLY_PAID, PAID)</li>
+                <li><code>issuedAt</code> (LocalDateTime)</li>
+            </ul>
+        </div>
+
+        <!-- 11. PaymentTransaction -->
+        <div class="entity-box">
+            <h3>11. PaymentTransaction (To'lovlar)</h3>
+            <ul>
+                <li><code>id</code> (Long)</li>
+                <li><code>invoice</code> (@ManyToOne)</li>
+                <li><code>amount</code> (BigDecimal)</li>
+                <li><code>paymentMethod</code> (Enum: CASH, CARD, INSURANCE)</li>
+                <li><code>transactionDate</code> (LocalDateTime)</li>
+            </ul>
+        </div>
+
+    </div> <!-- Grid End -->
+
+    <h2>2. REST API Logikasi va Endpointlar</h2>
+
+    <!-- Patient API -->
+    <h4 class="api-group-title">🩺 1. Patient API (Bemorlar uchun)</h4>
+
+    <div class="api-box">
+        <h4><span class="api-method method-get">GET</span> <code>/api/patients/doctors</code></h4>
+        <p><strong>Ruxsat:</strong> <code>ROLE_PATIENT</code></p>
+        <p><strong>Vazifasi:</strong> Mutaxassisligi bo'yicha shifokorlarni qidirish. (Filterlar: <code>?specialization=Kardiolog&maxFee=150000</code>).</p>
+    </div>
+
+    <div class="api-box">
+        <h4><span class="api-method method-get">GET</span> <code>/api/patients/doctors/{doctorId}/slots</code></h4>
+        <p><strong>Ruxsat:</strong> <code>ROLE_PATIENT</code></p>
+        <p><strong>Vazifasi:</strong> Shifokorning ma'lum bir kundagi bo'sh vaqtlarini ko'rsatish.</p>
+        <p><strong>Logika:</strong> Kiritilgan sana uchun <code>DoctorSchedule</code> dan ish vaqtini oladi. Keyin <code>Appointment</code> jadvalidan o'sha kundagi band qilingan vaqtlarni ayirib tashlab, faqat <strong>bo'sh</strong> (available) slotlarni qaytaradi.</p>
+    </div>
+
+    <div class="api-box">
+        <h4><span class="api-method method-post">POST</span> <code>/api/patients/appointments</code></h4>
+        <p><strong>Ruxsat:</strong> <code>ROLE_PATIENT</code></p>
+        <p><strong>Vazifasi:</strong> Shifokor qabuliga yozilish.</p>
+        <p><strong>Logika (MURAKKAB):</strong> Bemor shifokor ID, sana va boshlanish vaqtini yuboradi. Baza darajasida aynan shu vaqtga boshqa odam yozilmaganligini tekshirish kerak (Concurrency check). Agar bo'sh bo'lsa, statusi <code>PENDING</code> bo'lgan yozuv yaratiladi.</p>
+    </div>
+
+    <!-- Doctor API -->
+    <h4 class="api-group-title">👨‍⚕️ 2. Doctor API (Shifokorlar uchun)</h4>
+
+    <div class="api-box">
+        <h4><span class="api-method method-get">GET</span> <code>/api/doctors/my-appointments</code></h4>
+        <p><strong>Ruxsat:</strong> <code>ROLE_DOCTOR</code></p>
+        <p><strong>Vazifasi:</strong> Shifokor o'zining bugungi va ertangi qabullarini ko'rishi.</p>
+        <p><strong>Logika:</strong> Spring Security orqali joriy shifokorni aniqlab, faqat uning <code>CONFIRMED</code> qabullarini vaqt bo'yicha tartiblab qaytaradi.</p>
+    </div>
+
+    <div class="api-box">
+        <h4><span class="api-method method-post">POST</span> <code>/api/doctors/appointments/{id}/complete</code></h4>
+        <p><strong>Ruxsat:</strong> <code>ROLE_DOCTOR</code></p>
+        <p><strong>Vazifasi:</strong> Qabulni yakunlash, tashxis yozish va dori yozish.</p>
+        <p><strong>Logika (TRANZAKSIYA):</strong> 1. <code>Appointment</code> statusi <code>COMPLETED</code> ga o'zgaradi. 2. Yangi <code>MedicalRecord</code> yaratiladi. 3. Array ichida kelgan har bir dori uchun <code>Prescription</code> qo'shiladi. 4. Avtomatik ravishda <strong>Invoice</strong> yaratiladi (Shifokor ko'rigi narxi qoshib qo'yiladi).</p>
+    </div>
+
+    <!-- Pharmacy API -->
+    <h4 class="api-group-title">💊 3. Pharmacy API (Dorixona xodimi)</h4>
+
+    <div class="api-box">
+        <h4><span class="api-method method-get">GET</span> <code>/api/pharmacy/prescriptions/{patientId}</code></h4>
+        <p><strong>Ruxsat:</strong> <code>ROLE_PHARMACIST</code></p>
+        <p><strong>Vazifasi:</strong> Bemorning oxirgi yozilgan retseptini va dorilar ro'yxatini ko'rish.</p>
+    </div>
+
+    <div class="api-box">
+        <h4><span class="api-method method-post">POST</span> <code>/api/pharmacy/dispense/{medicalRecordId}</code></h4>
+        <p><strong>Ruxsat:</strong> <code>ROLE_PHARMACIST</code></p>
+        <p><strong>Vazifasi:</strong> Shifokor yozib bergan dorilarni bemorga sotish.</p>
+        <p><strong>Logika:</strong> <code>Medicine</code> jadvalidan <code>stockQuantity</code> (zaxira) yetarlimi tekshiradi. Zaxira yetsa, dori sonini kamaytiradi. Bemorning o'sha qabul uchun ochilgan <code>Invoice</code> iga dorilar narxini qo'shib qo'yadi.</p>
+    </div>
+
+    <!-- Reception API -->
+    <h4 class="api-group-title">💵 4. Reception & Billing API (Qabulxona xodimi)</h4>
+
+    <div class="api-box">
+        <h4><span class="api-method method-post">POST</span> <code>/api/reception/invoices/{invoiceId}/pay</code></h4>
+        <p><strong>Ruxsat:</strong> <code>ROLE_RECEPTIONIST</code></p>
+        <p><strong>Vazifasi:</strong> Bemor klinika va dorilar uchun to'lov qilishi.</p>
+        <p><strong>Logika:</strong> To'lov summasi kiritiladi. <code>PaymentTransaction</code> yaratiladi. Agar to'langan summa umumiy summaga teng bo'lsa, <code>Invoice</code> statusi <code>PAID</code> qilinadi.</p>
+    </div>
+
+    <!-- Admin API -->
+    <h4 class="api-group-title">📊 5. Admin Analytics (Boshqaruv)</h4>
+
+    <div class="api-box">
+        <h4><span class="api-method method-get">GET</span> <code>/api/admin/reports/revenue</code></h4>
+        <p><strong>Ruxsat:</strong> <code>ROLE_ADMIN</code></p>
+        <p><strong>Vazifasi:</strong> Klinikaning tushumi bo'yicha hisobot (Parametrlar: <code>?startDate=...&endDate=...</code>).</p>
+    </div>
+
+    <div class="api-box">
+        <h4><span class="api-method method-get">GET</span> <code>/api/admin/reports/doctor-performance</code></h4>
+        <p><strong>Ruxsat:</strong> <code>ROLE_ADMIN</code></p>
+        <p><strong>Vazifasi:</strong> Qaysi shifokor qancha bemor ko'rgani va qancha pul keltirganini aniqlash (Group By va Aggregation funksiyalaridan foydalaniladi).</p>
+    </div>
+
+    <div class="challenge-box">
+        <h3 style="color: #b45309;">🚀 Ushbu loyiha nimasi bilan qiyinroq? (Challenge)</h3>
+        <ul>
+            <li><strong>Vaqt va Slotlar hisobi:</strong> Backend shifokor ish grafigiga qarab avtomatik ravishda <code>["09:00", "09:30", "10:00"...]</code> shaklida bo'sh slotlarni generatsiya qilib berishi kerak.</li>
+            <li><strong>Concurrency (Parallel so'rovlar):</strong> Agar bitta mashhur shifokorning ertangi 10:00 dagi bo'sh vaqtini bir paytda 2 ta bemor bosib (Booking) yuborsa, ularning faqat bittasi saqlanishi kerak (Optimistic Locking <code>@Version</code> orqali yechish tavsiya etiladi).</li>
+            <li><strong>Kompleks Tranzaksiyalar:</strong> Dorixonadan dori sotish jarayonida pul hisoblanishi hamda ombordan dori ayirilishi kerak. Xato ketsa, hammasi orqaga qaytishi shart (Rollback).</li>
+            <li><strong>Jadvallararo kuchli bog'liqlik:</strong> <code>Appointment -> MedicalRecord -> Prescription -> Invoice</code> zanjirini to'g'ri qurish.</li>
+        </ul>
+    </div>
+
+</div>
+
+</body>
+</html>

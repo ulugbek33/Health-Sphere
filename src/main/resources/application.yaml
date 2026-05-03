@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: Health-Sphere
+  profiles:
+    active: dev
