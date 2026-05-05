@@ -23,6 +23,9 @@ import static org.springframework.format.annotation.DateTimeFormat.*;
 @RequestMapping("/api/patients")
 @RequiredArgsConstructor
 @PreAuthorize("hasRole('PATIENT')")
+@CrossOrigin(origins = {"http://localhost:5173"
+//        , "https://tastelab-tawny.vercel.app"
+})
 public class PatientController {
 
     private final PatientService patientService;

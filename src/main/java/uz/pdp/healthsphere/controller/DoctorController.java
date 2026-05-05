@@ -15,6 +15,9 @@ import java.util.List;
 @RequestMapping("/api/doctors")
 @RequiredArgsConstructor
 @PreAuthorize("hasRole('DOCTOR')")
+@CrossOrigin(origins = {"http://localhost:5173"
+//        , "https://tastelab-tawny.vercel.app"
+})
 public class DoctorController {
 
     private final DoctorService doctorService;

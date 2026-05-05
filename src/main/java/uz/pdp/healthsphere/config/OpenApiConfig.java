@@ -31,7 +31,8 @@ import io.swagger.v3.oas.annotations.servers.Server;
         ),
         servers = {
                 @Server(
-                        url = "http://localhost:9090",
+//                        url = "http://localhost:9090",
+                        url = "https://health-sphere-m67z.onrender.com",
                         description = "Development-Server"
                 )
         }

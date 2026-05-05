@@ -11,6 +11,9 @@ import uz.pdp.healthsphere.service.PaymentService;
 @RequestMapping("/api/reception")
 @RequiredArgsConstructor
 @PreAuthorize("hasRole('RECEPTIONIST')")
+@CrossOrigin(origins = {"http://localhost:5173"
+//        , "https://tastelab-tawny.vercel.app"
+})
 public class ReceptionController {
 
     private final PaymentService paymentService;
