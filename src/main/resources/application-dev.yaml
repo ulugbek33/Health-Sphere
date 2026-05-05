@@ -28,7 +28,7 @@ spring:
             enable: true
 
 server:
-  port: ${SERVER_PORT}
+  port: ${PORT}
 myapp:
   secret-key: ${SECRET_KEY}
   upload-path: ${UPLOAD_PATH}
