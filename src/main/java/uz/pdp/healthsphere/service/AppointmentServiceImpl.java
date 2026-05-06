@@ -67,33 +67,31 @@ public class AppointmentServiceImpl implements AppointmentService {
             return availableSlots;
 
         while (true) {
-
             LocalTime nextSlot = currentSlot.plusMinutes(duration);
+            if (nextSlot.isAfter(endTime)) break;
 
-            if (nextSlot.isAfter(endTime))
-                break;
+            // "isBusy"ni faqat start_time bilan emas, balki oraliq bilan tekshiramiz
+            LocalTime finalCurrentSlot = currentSlot;
+            LocalTime finalNextSlot = nextSlot;
 
-            if (nextSlot.isBefore(currentSlot))
-                break;
+            boolean isBusy = appointments.stream().anyMatch(app ->
+                    // Agar band bo'lgan vaqt bizning slotimiz bilan kesishsa:
+                    (app.getStartTime().isBefore(finalNextSlot) && app.getEndTime().isAfter(finalCurrentSlot))
+            );
 
-
-            boolean isBusy = busyStartTimes.contains(currentSlot);
             boolean isPast = false;
-
             if (date.equals(LocalDate.now())) {
                 if (currentSlot.isBefore(LocalTime.now()))
                     isPast = true;
             }
 
-            if (!isBusy && !isPast)
+            if (!isBusy && !isPast) {
                 availableSlots.add(currentSlot);
+            }
 
             currentSlot = nextSlot;
-
             if (currentSlot.equals(endTime))
                 break;
-
-            System.out.println(currentSlot);
         }
 
         return availableSlots;
