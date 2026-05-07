@@ -1,6 +1,7 @@
 package uz.pdp.healthsphere.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import uz.pdp.healthsphere.dto.request.DailyRevenueDTO;
 import uz.pdp.healthsphere.dto.request.DoctorPerformanceDTO;
@@ -8,6 +9,7 @@ import uz.pdp.healthsphere.dto.request.PaymentMethodBreakdownDTO;
 import uz.pdp.healthsphere.dto.request.RevenueReportDTO;
 import uz.pdp.healthsphere.enums.InvoiceStatus;
 import uz.pdp.healthsphere.enums.StatusEnum;
+import uz.pdp.healthsphere.exceptions.PasswordIncorrectException;
 import uz.pdp.healthsphere.repository.DoctorRepository;
 import uz.pdp.healthsphere.repository.InvoiceRepository;
 import uz.pdp.healthsphere.repository.PaymentTransactionRepository;
@@ -30,7 +32,7 @@ public class ReportServiceImpl implements ReportService {
     public RevenueReportDTO getRevenueReport(LocalDate startDate, LocalDate endDate) {
 
         if (startDate.isAfter(endDate)) {
-            throw new IllegalArgumentException("Start date cannot be after end date");
+            throw new PasswordIncorrectException("Start date cannot be after end date", HttpStatus.BAD_REQUEST);
         }
 
         LocalDateTime startDateTime = startDate.atStartOfDay();

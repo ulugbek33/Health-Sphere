@@ -76,7 +76,7 @@ public class AuthServiceImpl implements AuthService {
         user.setEmail(registerDTO.getEmail());
         user.setPhoneNumber(registerDTO.getPhoneNumber());
         user.setActive(false);
-        user.setRole(RoleEnum.ADMIN);
+        user.setRole(registerDTO.getRole());
 
         userRepository.save(user);
 

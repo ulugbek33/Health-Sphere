@@ -1,6 +1,7 @@
 package uz.pdp.healthsphere.handler;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -66,11 +67,11 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(exception.getStatus()).body(errorDTO);
     }
 
-    @ExceptionHandler(SecurityException.class)
-    public ResponseEntity<ErrorDTO> handler(SecurityException exception) {
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ErrorDTO> handler(AccessDeniedException exception) {
 
         ErrorDTO errorDTO = new ErrorDTO(
-                "Forbidden" + exception.getMessage(),
+                "Forbidden : " + exception.getMessage(),
                 403
         );
 
