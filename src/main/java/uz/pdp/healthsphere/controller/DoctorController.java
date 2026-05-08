@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import uz.pdp.healthsphere.dto.AppointmentDTO;
+import uz.pdp.healthsphere.dto.DoctorDTO;
 import uz.pdp.healthsphere.dto.MedicalRecordDTO;
 import uz.pdp.healthsphere.service.DoctorService;
 
@@ -32,6 +33,11 @@ public class DoctorController {
                                                  @Valid @RequestBody MedicalRecordDTO medicalRecordDTO) {
         doctorService.createPrescription(id, medicalRecordDTO);
         return ResponseEntity.ok("Appointment completed successfully ");
+    }
+
+    @PostMapping("/create")
+    public DoctorDTO createDoctor(@RequestBody @Valid DoctorDTO doctorDTO) {
+        return doctorService.create(doctorDTO);
     }
 
 }

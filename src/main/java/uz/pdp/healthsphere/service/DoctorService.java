@@ -2,6 +2,7 @@ package uz.pdp.healthsphere.service;
 
 import org.springframework.http.ResponseEntity;
 import uz.pdp.healthsphere.dto.AppointmentDTO;
+import uz.pdp.healthsphere.dto.DoctorDTO;
 import uz.pdp.healthsphere.dto.MedicalRecordDTO;
 
 import java.util.List;
@@ -12,4 +13,5 @@ public interface DoctorService {
 
     MedicalRecordDTO createPrescription(Long id, MedicalRecordDTO medicalRecordDTO);
 
+    DoctorDTO create(DoctorDTO doctorDTO);
 }

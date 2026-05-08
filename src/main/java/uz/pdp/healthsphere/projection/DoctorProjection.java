@@ -10,6 +10,8 @@ import java.util.List;
 
 public interface DoctorProjection {
 
+    Long doctorId();
+
     String getFullName();
 
     Integer getExperienceYears();

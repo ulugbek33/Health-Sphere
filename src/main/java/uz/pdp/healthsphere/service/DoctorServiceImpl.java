@@ -8,6 +8,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uz.pdp.healthsphere.dto.AppointmentDTO;
+import uz.pdp.healthsphere.dto.DoctorDTO;
 import uz.pdp.healthsphere.dto.MedicalRecordDTO;
 import uz.pdp.healthsphere.dto.PrescriptionDTO;
 import uz.pdp.healthsphere.entity.*;
@@ -17,6 +18,7 @@ import uz.pdp.healthsphere.enums.StatusEnum;
 import uz.pdp.healthsphere.exceptions.AppointmentStatusException;
 import uz.pdp.healthsphere.exceptions.EntityNotFoundException;
 import uz.pdp.healthsphere.mapper.AppointmentMapper;
+import uz.pdp.healthsphere.mapper.DoctorMapper;
 import uz.pdp.healthsphere.mapper.MedicalRecordMapper;
 import uz.pdp.healthsphere.repository.*;
 
@@ -39,6 +41,9 @@ public class DoctorServiceImpl implements DoctorService {
     private final MedicineRepository medicineRepository;
     private final PrescriptionRepository prescriptionRepository;
     private final InvoiceRepository invoiceRepository;
+    private final DoctorMapper doctorMapper;
+    private final UserRepository userRepository;
+    private final SpecializationRepository specializationRepository;
 
     @Override
     public List<AppointmentDTO> myAppointments() {
@@ -120,6 +125,25 @@ public class DoctorServiceImpl implements DoctorService {
         invoiceRepository.save(invoice);
 
         return medicalRecordMapper.toDTO(medicalRecord);
+    }
+
+    @Override
+    @Transactional
+    public DoctorDTO create(DoctorDTO doctorDTO) {
+
+        if (doctorRepository.existsByUserId(doctorDTO.getUserId()))
+            throw new RuntimeException("Bu foydalanuvchi allaqachon shifokor sifatida ro'yhatdan o'tgan : " + doctorDTO.getFullName());
+
+        User user = userRepository.getByIdOrThrow(doctorDTO.getUserId());
+        Specialization specialization = specializationRepository.getByIdOrThrow(doctorDTO.getSpecialtyId());
+
+        Doctor doctor = doctorMapper.toEntity(doctorDTO);
+        doctor.setUser(user);
+        doctor.setSpecialization(specialization);
+
+        Doctor savedDoctor = doctorRepository.save(doctor);
+
+        return doctorMapper.toDTO(savedDoctor);
     }
 
 }

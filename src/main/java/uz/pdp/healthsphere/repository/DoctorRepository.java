@@ -23,16 +23,16 @@ public interface DoctorRepository extends JpaRepository<Doctor, Long> {
     }
 
     @Query(value = """
-            SELECT 
-                d.full_name AS fullName, 
-                d.experience_years AS experienceYears, 
-                d.consultation_fee AS consultationFee, 
-                d.room_number AS roomNumber,
-                s.name AS specializationName
-            FROM doctor d
-            JOIN specialization s ON d.specialization_id = s.id
-            WHERE (:specialization IS NULL OR s.name = :specialization)
-              AND (:maxFee IS NULL OR d.consultation_fee <= :maxFee)
+            SELECT d.id               as doctorId,
+                d.full_name        AS fullName,
+                d.experience_years AS experienceYears,
+                d.consultation_fee AS consultationFee,
+                d.room_number      AS roomNumber,
+                s.name             AS specializationName
+                FROM doctor d
+                JOIN specialization s ON d.specialization_id = s.id
+                WHERE (:specialization IS NULL OR s.name = :specialization)
+                AND (:maxFee IS NULL OR d.consultation_fee <= :maxFee);
             """, nativeQuery = true)
     List<DoctorProjection> findByDoctorsByFilter(
             @Param("specialization") String specialization,
@@ -52,4 +52,5 @@ public interface DoctorRepository extends JpaRepository<Doctor, Long> {
             "GROUP BY d.id, d.fullName")
     List<DoctorPerformanceDTO> getDoctorPerformance(@Param("status") StatusEnum status);
 
+    boolean existsByUserId(Long userId);
 }
