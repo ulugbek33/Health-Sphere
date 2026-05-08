@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface DoctorProjection {
 
-    Long doctorId();
+    Long getDoctorId();
 
     String getFullName();
 

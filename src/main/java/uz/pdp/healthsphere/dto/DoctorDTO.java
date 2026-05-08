@@ -38,7 +38,9 @@ public class DoctorDTO implements Serializable {
 
     private Long specialtyId;
 
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private List<DoctorScheduleDTO> doctorSchedules;
 
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private List<AppointmentDTO> appointments;
 }
