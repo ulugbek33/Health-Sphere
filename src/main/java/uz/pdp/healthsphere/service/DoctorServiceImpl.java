@@ -131,14 +131,15 @@ public class DoctorServiceImpl implements DoctorService {
     @Transactional
     public DoctorDTO create(DoctorDTO doctorDTO) {
 
-        if (doctorRepository.existsByUserId(doctorDTO.getUserId()))
-            throw new RuntimeException("Bu foydalanuvchi allaqachon shifokor sifatida ro'yhatdan o'tgan : " + doctorDTO.getFullName());
+        User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        User user = userRepository.getByIdOrThrow(doctorDTO.getUserId());
+        if (doctorRepository.existsByUserId(currentUser.getId()))
+            throw new RuntimeException("Siz allaqachon shifokor sifatida ro'yhatdan o'tgansiz : " + currentUser.getUsername());
+
         Specialization specialization = specializationRepository.getByIdOrThrow(doctorDTO.getSpecialtyId());
 
         Doctor doctor = doctorMapper.toEntity(doctorDTO);
-        doctor.setUser(user);
+        doctor.setUser(currentUser);
         doctor.setSpecialization(specialization);
 
         Doctor savedDoctor = doctorRepository.save(doctor);
