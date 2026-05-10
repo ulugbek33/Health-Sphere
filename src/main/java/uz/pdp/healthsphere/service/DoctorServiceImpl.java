@@ -156,7 +156,10 @@ public class DoctorServiceImpl implements DoctorService {
     @Transactional
     public DoctorScheduleDTO createSlots(DoctorScheduleDTO scheduleDTO) {
 
-        Doctor doctor = doctorRepository.getByIdOrThrow(scheduleDTO.getDoctorId());
+        User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        Doctor doctor = doctorRepository.findByUser(currentUser)
+                .orElseThrow(() -> new EntityNotFoundException("Doctor topilmadi ", HttpStatus.NOT_FOUND));
 
         DoctorSchedule schedule = doctorScheduleMapper.toEntity(scheduleDTO);
         schedule.setDoctor(doctor);

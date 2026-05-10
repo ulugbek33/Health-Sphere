@@ -7,7 +7,6 @@ public record StaffCreateDTO(
         String password,
         RoleEnum role, // Admin rolni o'zi tanlaydi
         String email,
-        String phoneNumber,
-        String fullName
+        String phoneNumber
 ) {
 }
