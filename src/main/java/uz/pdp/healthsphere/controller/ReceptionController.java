@@ -12,7 +12,7 @@ import uz.pdp.healthsphere.service.PaymentService;
 @RequiredArgsConstructor
 @PreAuthorize("hasRole('RECEPTIONIST')")
 @CrossOrigin(origins = {"http://localhost:5173"
-//        , "https://tastelab-tawny.vercel.app"
+        , "https://healthsphere-kappa.vercel.app"
 })
 public class ReceptionController {
 

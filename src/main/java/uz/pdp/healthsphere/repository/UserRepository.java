@@ -3,6 +3,7 @@ package uz.pdp.healthsphere.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.http.HttpStatus;
 import uz.pdp.healthsphere.entity.User;
+import uz.pdp.healthsphere.enums.RoleEnum;
 import uz.pdp.healthsphere.exceptions.EntityNotFoundException;
 
 import java.util.List;
@@ -20,4 +21,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     boolean existsByUsername(String username);
 
     Optional<User> findByPhoneNumber(String phoneNumber);
+
+    boolean existsByRole(RoleEnum role);
 }

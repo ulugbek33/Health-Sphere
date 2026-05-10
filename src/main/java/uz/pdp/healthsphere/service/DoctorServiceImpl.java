@@ -7,19 +7,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import uz.pdp.healthsphere.dto.AppointmentDTO;
-import uz.pdp.healthsphere.dto.DoctorDTO;
-import uz.pdp.healthsphere.dto.MedicalRecordDTO;
-import uz.pdp.healthsphere.dto.PrescriptionDTO;
+import uz.pdp.healthsphere.dto.*;
 import uz.pdp.healthsphere.entity.*;
 import uz.pdp.healthsphere.enums.DayOfWeekEnum;
 import uz.pdp.healthsphere.enums.InvoiceStatus;
 import uz.pdp.healthsphere.enums.StatusEnum;
 import uz.pdp.healthsphere.exceptions.AppointmentStatusException;
 import uz.pdp.healthsphere.exceptions.EntityNotFoundException;
-import uz.pdp.healthsphere.mapper.AppointmentMapper;
-import uz.pdp.healthsphere.mapper.DoctorMapper;
-import uz.pdp.healthsphere.mapper.MedicalRecordMapper;
+import uz.pdp.healthsphere.mapper.*;
 import uz.pdp.healthsphere.repository.*;
 
 import java.time.LocalDate;
@@ -44,6 +39,8 @@ public class DoctorServiceImpl implements DoctorService {
     private final DoctorMapper doctorMapper;
     private final UserRepository userRepository;
     private final SpecializationRepository specializationRepository;
+    private final SpecializationMapper specializationMapper;
+    private final DoctorScheduleMapper doctorScheduleMapper;
 
     @Override
     public List<AppointmentDTO> myAppointments() {
@@ -145,6 +142,29 @@ public class DoctorServiceImpl implements DoctorService {
         Doctor savedDoctor = doctorRepository.save(doctor);
 
         return doctorMapper.toDTO(savedDoctor);
+    }
+
+    @Override
+    public List<SpecializationDTO> getSpeciality() {
+
+        List<Specialization> specializations = specializationRepository.findAll();
+
+        return specializationMapper.toDTO(specializations);
+    }
+
+    @Override
+    @Transactional
+    public DoctorScheduleDTO createSlots(DoctorScheduleDTO scheduleDTO) {
+
+        Doctor doctor = doctorRepository.getByIdOrThrow(scheduleDTO.getDoctorId());
+
+        DoctorSchedule schedule = doctorScheduleMapper.toEntity(scheduleDTO);
+        schedule.setDoctor(doctor);
+        schedule.setDayOfWeek(scheduleDTO.getDayOfWeek());
+
+        DoctorSchedule saved = doctorScheduleRepository.save(schedule);
+
+        return doctorScheduleMapper.toDTO(saved);
     }
 
 }

@@ -1,9 +1,8 @@
 package uz.pdp.healthsphere.service;
 
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
-import uz.pdp.healthsphere.dto.AppointmentDTO;
-import uz.pdp.healthsphere.dto.DoctorDTO;
-import uz.pdp.healthsphere.dto.MedicalRecordDTO;
+import uz.pdp.healthsphere.dto.*;
 
 import java.util.List;
 
@@ -14,4 +13,8 @@ public interface DoctorService {
     MedicalRecordDTO createPrescription(Long id, MedicalRecordDTO medicalRecordDTO);
 
     DoctorDTO create(DoctorDTO doctorDTO);
+
+    List<SpecializationDTO> getSpeciality();
+
+    DoctorScheduleDTO createSlots(DoctorScheduleDTO scheduleDTO);
 }

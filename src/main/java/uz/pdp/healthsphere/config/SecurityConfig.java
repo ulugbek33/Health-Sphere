@@ -64,7 +64,7 @@ public class SecurityConfig {
 
         // Frontend manzilingizga ruxsat beramiz
         configuration.setAllowedOrigins(Arrays.asList("http://localhost:5173"
-//                , "https://tastelab-tawny.vercel.app"
+                , "https://healthsphere-kappa.vercel.app"
         ));
 
         // Ruxsat berilgan metodlar

@@ -5,9 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import uz.pdp.healthsphere.dto.AppointmentDTO;
-import uz.pdp.healthsphere.dto.DoctorDTO;
-import uz.pdp.healthsphere.dto.MedicalRecordDTO;
+import uz.pdp.healthsphere.dto.*;
 import uz.pdp.healthsphere.service.DoctorService;
 
 import java.util.List;
@@ -15,20 +13,26 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/doctors")
 @RequiredArgsConstructor
-@PreAuthorize("hasRole('DOCTOR')")
 @CrossOrigin(origins = {"http://localhost:5173"
-//        , "https://tastelab-tawny.vercel.app"
+        , "https://healthsphere-kappa.vercel.app"
 })
 public class DoctorController {
 
     private final DoctorService doctorService;
 
+    @GetMapping("/specialty/open")
+    public List<SpecializationDTO> getSpecialty() {
+        return doctorService.getSpeciality();
+    }
+
     @GetMapping("/my-appointments")
+    @PreAuthorize("hasRole('DOCTOR')")
     public List<AppointmentDTO> getMyAppointments() {
         return doctorService.myAppointments();
     }
 
     @PostMapping("/appointments/{id}/complete")
+    @PreAuthorize("hasRole('DOCTOR')")
     public ResponseEntity<?> completeAppointment(@PathVariable Long id,
                                                  @Valid @RequestBody MedicalRecordDTO medicalRecordDTO) {
         doctorService.createPrescription(id, medicalRecordDTO);
@@ -36,8 +40,15 @@ public class DoctorController {
     }
 
     @PostMapping("/create")
+    @PreAuthorize("hasRole('DOCTOR')")
     public DoctorDTO createDoctor(@RequestBody @Valid DoctorDTO doctorDTO) {
         return doctorService.create(doctorDTO);
+    }
+
+    @PostMapping("/create/slots")
+    @PreAuthorize("hasRole('DOCTOR')")
+    public DoctorScheduleDTO createDoctorSlots(@RequestBody @Valid DoctorScheduleDTO scheduleDTO) {
+        return doctorService.createSlots(scheduleDTO);
     }
 
 }

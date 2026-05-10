@@ -72,11 +72,8 @@ public class AuthServiceImpl implements AuthService {
         User user = userMapper.toEntity(registerDTO);
 
         user.setPassword(passwordEncoder.encode(registerDTO.getPassword()));
-        user.setUsername(registerDTO.getUsername());
-        user.setEmail(registerDTO.getEmail());
-        user.setPhoneNumber(registerDTO.getPhoneNumber());
-        user.setActive(false);
-        user.setRole(registerDTO.getRole());
+        user.setRole(RoleEnum.PATIENT);
+        user.setActive(true);
 
         userRepository.save(user);
 

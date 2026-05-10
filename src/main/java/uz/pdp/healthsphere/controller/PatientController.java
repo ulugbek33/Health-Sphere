@@ -24,7 +24,7 @@ import static org.springframework.format.annotation.DateTimeFormat.*;
 @RequiredArgsConstructor
 @PreAuthorize("hasRole('PATIENT')")
 @CrossOrigin(origins = {"http://localhost:5173"
-//        , "https://tastelab-tawny.vercel.app"
+        , "https://healthsphere-kappa.vercel.app"
 })
 public class PatientController {
 

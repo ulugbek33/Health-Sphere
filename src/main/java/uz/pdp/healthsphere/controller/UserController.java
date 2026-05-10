@@ -13,7 +13,7 @@ import uz.pdp.healthsphere.service.UserService;
 @RequestMapping("/api/user")
 @RequiredArgsConstructor
 @CrossOrigin(origins = {"http://localhost:5173"
-//        , "https://tastelab-tawny.vercel.app"
+        , "https://healthsphere-kappa.vercel.app"
 })
 public class UserController {
 

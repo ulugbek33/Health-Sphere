@@ -29,6 +29,4 @@ public class RegisterDTO {
             message = "Telefon raqami +998-XX-XXX-XX-XX formatida bo'lishi kerak")
     private String phoneNumber;
 
-    private RoleEnum role;
-
 }
