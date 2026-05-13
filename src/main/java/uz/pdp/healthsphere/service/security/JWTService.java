@@ -37,20 +37,19 @@ public class JWTService {
 
     }
 
-//    public String generateToken(String phoneNumber, Date date) {
-//
-//        User user = userRepository.findByPhoneNumber(phoneNumber)
-//                .orElseThrow(() -> new RuntimeException("User not found for token: " + phoneNumber));
-//
-//        return Jwts.builder()
-//                .subject(phoneNumber)
-//                .claim("role", user.getRole().name())
-//                .claim("randomId", UUID.randomUUID().toString())
-//                .expiration(date)
-//                .signWith(Keys.hmacShaKeyFor(SECRET_KEY.getBytes()))
-//                .compact();
-//
-//    }
+    public String generateToken(String username) {
+
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found for token: " + username));
+
+        return Jwts.builder()
+                .subject(username)
+                .claim("role", user.getRole().name())
+                .claim("randomId", UUID.randomUUID().toString())
+                .signWith(Keys.hmacShaKeyFor(SECRET_KEY.getBytes()))
+                .compact();
+
+    }
 
     public String parseToken(String token) {
 

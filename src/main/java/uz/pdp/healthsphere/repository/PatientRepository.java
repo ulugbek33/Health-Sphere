@@ -16,4 +16,6 @@ public interface PatientRepository extends JpaRepository<Patient, Long> {
         return findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Patient not found with id: " + id, HttpStatus.NOT_FOUND));
     }
+
+    boolean existsByUserId(Long userId);
 }

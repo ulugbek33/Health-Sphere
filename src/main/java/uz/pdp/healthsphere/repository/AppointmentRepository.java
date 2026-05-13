@@ -44,5 +44,5 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
             @Param("status") StatusEnum status,
             @Param("dates") List<LocalDate> dates);
 
-    List<Appointment> findByPatient(Patient patient);
+    List<Appointment> findAllByPatient(Patient patient);
 }

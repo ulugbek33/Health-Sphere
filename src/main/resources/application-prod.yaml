@@ -1,15 +1,13 @@
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/health_sphere?sslmode=disable
-    username: postgres
-    password: 1305
+    url: jdbc:postgresql://${DB_HOSTNAME}:${DB_PORT}/${DB_NAME}?sslmode=require
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
   jpa:
     hibernate:
       ddl-auto: update
     show-sql: true
-    # Dialektni aniq ko'rsatish xatolikning oldini oladi
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
     properties:
       hibernate:
         format_sql: true
@@ -20,8 +18,8 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: ulugbekmominov535@gmail.com
-    password: xwce hvwe gutk bdyi
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
     properties:
       mail:
         smtp:
@@ -30,8 +28,7 @@ spring:
             enable: true
 
 server:
-  port: 9090
-
+  port: ${PORT}
 myapp:
-  secret-key: c0388696-55b0-479c-a142-a2ae7cbe269a
-  upload-path: C:\\Users\\HP ENVY\\uploads
+  secret-key: ${SECRET_KEY}
+  upload-path: ${UPLOAD_PATH}

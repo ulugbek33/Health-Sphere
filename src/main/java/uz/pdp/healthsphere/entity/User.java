@@ -27,6 +27,8 @@ public class User extends AbsLongEntity implements UserDetails {
 
     private String password;
 
+    private String fullName;
+
     @Column(unique = true)
     private String email;
 

@@ -46,14 +46,12 @@ public class AuthServiceImpl implements AuthService {
     @Transactional
     public TokenDTO login(LoginDTO loginDTO) {
 
-//        User user = loadUserByPhoneNumber(loginDTO.getPhoneNumber());
         User user = loadUserByUsername(loginDTO.getUsername());
 
         boolean matches = passwordEncoder.matches(loginDTO.getPassword(), user.getPassword());
 
         if (!matches)
             throw new PasswordIncorrectException("Invalid username or password : " + loginDTO.getUsername(), HttpStatus.BAD_REQUEST);
-//            throw new PasswordIncorrectException("Invalid phone or password : " + loginDTO.getPhoneNumber(), HttpStatus.BAD_REQUEST);
 
         String accessToken = jwtService.generateToken(loginDTO.getUsername(), new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24));
         String refreshToken = jwtService.generateToken(loginDTO.getUsername(), new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24));

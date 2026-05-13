@@ -34,7 +34,12 @@ public class UserDTO implements Serializable {
     @NotBlank
     private String phoneNumber;
 
+    @NotBlank
+    private String fullName;
+
     private Boolean active;
 
     private RoleEnum role;
+
+    private String token;
 }

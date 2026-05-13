@@ -23,4 +23,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByPhoneNumber(String phoneNumber);
 
     boolean existsByRole(RoleEnum role);
+
+    boolean existsByEmail(String email);
 }

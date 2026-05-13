@@ -6,11 +6,15 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uz.pdp.healthsphere.dto.MedicalRecordDTO;
+import uz.pdp.healthsphere.dto.MedicineDTO;
+import uz.pdp.healthsphere.dto.PatientDTO;
 import uz.pdp.healthsphere.dto.PrescriptionDTO;
 import uz.pdp.healthsphere.entity.*;
 import uz.pdp.healthsphere.exceptions.EntityNotFoundException;
 import uz.pdp.healthsphere.exceptions.OutOfStockException;
 import uz.pdp.healthsphere.mapper.MedicalRecordMapper;
+import uz.pdp.healthsphere.mapper.MedicineMapper;
+import uz.pdp.healthsphere.mapper.PatientMapper;
 import uz.pdp.healthsphere.mapper.PrescriptionMapper;
 import uz.pdp.healthsphere.repository.*;
 
@@ -23,12 +27,13 @@ public class PharmacyServiceImpl implements PharmacyService {
 
     private final PatientRepository patientRepository;
     private final PrescriptionRepository prescriptionRepository;
-    private final PrescriptionMapper prescriptionMapper;
+    private final MedicineMapper medicineMapper;
     private final AppointmentRepository appointmentRepository;
     private final MedicalRecordRepository medicalRecordRepository;
     private final MedicalRecordMapper medicalRecordMapper;
     private final MedicineRepository medicineRepository;
     private final InvoiceRepository invoiceRepository;
+    private final PatientMapper patientMapper;
 
     @Override
     public MedicalRecordDTO readPrescription(Long patientId) {
@@ -75,6 +80,33 @@ public class PharmacyServiceImpl implements PharmacyService {
 
         invoice.setTotalAmount(invoice.getTotalAmount().add(totalMedicinePrice));
         invoiceRepository.save(invoice);
+    }
+
+    @Override
+    public List<MedicineDTO> getMedicines() {
+
+        List<Medicine> medicines = medicineRepository.findAll();
+
+        return medicineMapper.toDTO(medicines);
+    }
+
+    @Override
+    @Transactional
+    public MedicineDTO addMedicine(MedicineDTO medicineDTO) {
+
+        Medicine medicine = medicineMapper.toEntity(medicineDTO);
+
+        medicineRepository.save(medicine);
+
+        return medicineMapper.toDTO(medicine);
+    }
+
+    @Override
+    public List<PatientDTO> getPatients() {
+
+        List<Patient> patients = patientRepository.findAll();
+
+        return patientMapper.toDTO(patients);
     }
 
 }

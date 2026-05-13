@@ -3,10 +3,12 @@ package uz.pdp.healthsphere.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import uz.pdp.healthsphere.dto.AppointmentDTO;
 import uz.pdp.healthsphere.dto.DoctorScheduleDTO;
+import uz.pdp.healthsphere.dto.PatientDTO;
 import uz.pdp.healthsphere.dto.request.AppointmentRequestDTO;
 import uz.pdp.healthsphere.projection.DoctorProjection;
 import uz.pdp.healthsphere.service.AppointmentService;
@@ -43,9 +45,19 @@ public class PatientController {
         return appointmentService.getAvailableSlots(doctorId, date);
     }
 
+    @GetMapping("/my-appointments")
+    public List<AppointmentDTO> getMyAppointments() {
+        return patientService.getAppointments();
+    }
+
     @PostMapping("/appointments")
     public AppointmentDTO createAppointment(@RequestBody @Valid AppointmentRequestDTO appointmentRequestDTO) {
         return appointmentService.createAppointment(appointmentRequestDTO);
+    }
+
+    @PostMapping("/create")
+    public ResponseEntity<PatientDTO> createPatient(@RequestBody @Valid PatientDTO patientDTO) {
+        return ResponseEntity.ok(patientService.create(patientDTO));
     }
 
 }
