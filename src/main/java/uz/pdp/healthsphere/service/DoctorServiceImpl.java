@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,6 +13,7 @@ import uz.pdp.healthsphere.entity.*;
 import uz.pdp.healthsphere.enums.DayOfWeekEnum;
 import uz.pdp.healthsphere.enums.InvoiceStatus;
 import uz.pdp.healthsphere.enums.StatusEnum;
+import uz.pdp.healthsphere.enums.ToggleStatus;
 import uz.pdp.healthsphere.exceptions.AppointmentStatusException;
 import uz.pdp.healthsphere.exceptions.EntityNotFoundException;
 import uz.pdp.healthsphere.mapper.*;
@@ -47,6 +49,9 @@ public class DoctorServiceImpl implements DoctorService {
 
         User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
+        if (currentUser.getToggleStatus() == ToggleStatus.DISABLED)
+            throw new AccessDeniedException("Sizning hisobingiz bloklangan! Amalni bajarishga ruxsat yo'q.");
+
         Doctor doctor = doctorRepository.findByUser(currentUser)
                 .orElseThrow(() -> new EntityNotFoundException("Bu foydalanuvchi doctor emas ", HttpStatus.NOT_FOUND));
 
@@ -78,6 +83,9 @@ public class DoctorServiceImpl implements DoctorService {
     public MedicalRecordDTO createPrescription(Long id, MedicalRecordDTO medicalRecordDTO) {
 
         User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if (currentUser.getToggleStatus() == ToggleStatus.DISABLED)
+            throw new AccessDeniedException("Sizning hisobingiz bloklangan! Amalni bajarishga ruxsat yo'q.");
 
         Doctor doctor = doctorRepository.findByUser(currentUser)
                 .orElseThrow(() -> new EntityNotFoundException("Doctor topilmadi ", HttpStatus.NOT_FOUND));
@@ -130,6 +138,9 @@ public class DoctorServiceImpl implements DoctorService {
 
         User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
+        if (currentUser.getToggleStatus() == ToggleStatus.DISABLED)
+            throw new AccessDeniedException("Sizning hisobingiz bloklangan! Amalni bajarishga ruxsat yo'q.");
+
         if (doctorRepository.existsByUserId(currentUser.getId()))
             throw new RuntimeException("Siz allaqachon shifokor sifatida ro'yhatdan o'tgansiz : " + currentUser.getUsername());
 
@@ -157,6 +168,9 @@ public class DoctorServiceImpl implements DoctorService {
     public DoctorScheduleDTO createSlots(DoctorScheduleDTO scheduleDTO) {
 
         User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if (currentUser.getToggleStatus() == ToggleStatus.DISABLED)
+            throw new AccessDeniedException("Sizning hisobingiz bloklangan! Amalni bajarishga ruxsat yo'q.");
 
         Doctor doctor = doctorRepository.findByUser(currentUser)
                 .orElseThrow(() -> new EntityNotFoundException("Doctor topilmadi ", HttpStatus.NOT_FOUND));

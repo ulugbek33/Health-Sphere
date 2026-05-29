@@ -13,4 +13,6 @@ public interface AppointmentService {
 
     AppointmentDTO createAppointment(AppointmentRequestDTO appointmentRequestDTO);
 
+    void deleteAppointment(Long id);
+
 }

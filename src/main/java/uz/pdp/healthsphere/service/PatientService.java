@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import org.jspecify.annotations.Nullable;
 import uz.pdp.healthsphere.dto.AppointmentDTO;
 import uz.pdp.healthsphere.dto.DoctorScheduleDTO;
+import uz.pdp.healthsphere.dto.InvoiceDTO;
 import uz.pdp.healthsphere.dto.PatientDTO;
 import uz.pdp.healthsphere.projection.DoctorProjection;
 
@@ -17,5 +18,7 @@ public interface PatientService {
     PatientDTO create(PatientDTO patientDTO);
 
     List<AppointmentDTO> getAppointments();
+
+    List<InvoiceDTO> getMyInvoices();
 
 }

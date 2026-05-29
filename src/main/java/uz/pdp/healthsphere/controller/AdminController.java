@@ -11,6 +11,7 @@ import uz.pdp.healthsphere.dto.request.DoctorPerformanceDTO;
 import uz.pdp.healthsphere.dto.request.RevenueReportDTO;
 import uz.pdp.healthsphere.dto.security.StaffCreateDTO;
 import uz.pdp.healthsphere.enums.StatusEnum;
+import uz.pdp.healthsphere.enums.ToggleStatus;
 import uz.pdp.healthsphere.service.AdminService;
 import uz.pdp.healthsphere.service.ReportService;
 
@@ -45,6 +46,12 @@ public class AdminController {
     @PostMapping("/create-staff")
     public ResponseEntity<UserDTO> createStaff(@RequestBody @Valid StaffCreateDTO staffCreateDTO) {
         return ResponseEntity.ok(adminService.createStaff(staffCreateDTO));
+    }
+
+    @PatchMapping("/users/{id}/toggle-status")
+    public ResponseEntity<UserDTO> toggleStatus(@PathVariable Long id,
+                                                @RequestParam ToggleStatus status) {
+        return ResponseEntity.ok(adminService.toggleStatus(id, status));
     }
 
 }

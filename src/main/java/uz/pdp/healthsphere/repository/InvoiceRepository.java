@@ -33,4 +33,5 @@ public interface InvoiceRepository extends JpaRepository<Invoice, Long> {
     BigDecimal getTotalUnPaidAmount();
 
 
+    List<Invoice> findAllByPatient(Patient patient);
 }

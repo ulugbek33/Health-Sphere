@@ -13,6 +13,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import uz.pdp.healthsphere.entity.template.AbsLongEntity;
 import uz.pdp.healthsphere.enums.RoleEnum;
+import uz.pdp.healthsphere.enums.ToggleStatus;
 
 import java.util.Collection;
 import java.util.List;
@@ -40,9 +41,17 @@ public class User extends AbsLongEntity implements UserDetails {
     @Enumerated(EnumType.STRING)
     private RoleEnum role;
 
+    @Enumerated(EnumType.STRING)
+    private ToggleStatus toggleStatus;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority("ROLE_" + role.name()));
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return this.active;
     }
 
 }

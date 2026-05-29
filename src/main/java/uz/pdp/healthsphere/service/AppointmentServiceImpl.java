@@ -2,6 +2,7 @@ package uz.pdp.healthsphere.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -11,6 +12,7 @@ import uz.pdp.healthsphere.dto.request.AppointmentRequestDTO;
 import uz.pdp.healthsphere.entity.*;
 import uz.pdp.healthsphere.enums.DayOfWeekEnum;
 import uz.pdp.healthsphere.enums.StatusEnum;
+import uz.pdp.healthsphere.enums.ToggleStatus;
 import uz.pdp.healthsphere.exceptions.AppointmentConflictException;
 import uz.pdp.healthsphere.exceptions.EntityNotFoundException;
 import uz.pdp.healthsphere.exceptions.InvalidTimeRangeException;
@@ -103,6 +105,9 @@ public class AppointmentServiceImpl implements AppointmentService {
 
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
+        if (user.getToggleStatus() == ToggleStatus.DISABLED)
+            throw new AccessDeniedException("Sizning hisobingiz bloklangan! Amalni bajarishga ruxsat yo'q.");
+
         Patient patient = patientRepository.findByUser(user)
                 .orElseThrow(() -> new EntityNotFoundException("Patient not found :", HttpStatus.NOT_FOUND));
 
@@ -142,6 +147,32 @@ public class AppointmentServiceImpl implements AppointmentService {
         appointmentRepository.save(appointment);
 
         return appointmentMapper.toDTO(appointment);
+    }
+
+    @Override
+    @Transactional
+    public void deleteAppointment(Long id) {
+
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if (user.getToggleStatus() == ToggleStatus.DISABLED)
+            throw new AccessDeniedException("Sizning hisobingiz bloklangan! Amalni bajarishga ruxsat yo'q.");
+
+        Appointment appointment = appointmentRepository.getByIdOrThrow(id);
+
+        if (!appointment.getPatient().getUser().getId().equals(user.getId()))
+            throw new AccessDeniedException(" Siz faqat o'zingizning uchrashuvingizni bekor qila olasiz!");
+
+        if (appointment.getStatus() == StatusEnum.CANCELLED)
+            throw new IllegalArgumentException(" Bu uchrashuv allaqachon bekor qilingan.");
+
+        if (appointment.getStatus() == StatusEnum.COMPLETED)
+            throw new IllegalStateException(" Tugallangan uchrashuvni bekor qilib bo'lmaydi.");
+
+        appointment.setStatus(StatusEnum.CANCELLED);
+
+        appointmentRepository.save(appointment);
+
     }
 
 }

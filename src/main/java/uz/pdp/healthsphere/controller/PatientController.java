@@ -8,6 +8,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import uz.pdp.healthsphere.dto.AppointmentDTO;
 import uz.pdp.healthsphere.dto.DoctorScheduleDTO;
+import uz.pdp.healthsphere.dto.InvoiceDTO;
 import uz.pdp.healthsphere.dto.PatientDTO;
 import uz.pdp.healthsphere.dto.request.AppointmentRequestDTO;
 import uz.pdp.healthsphere.projection.DoctorProjection;
@@ -50,6 +51,11 @@ public class PatientController {
         return patientService.getAppointments();
     }
 
+    @GetMapping("/my-invoices")
+    public List<InvoiceDTO> getMyInvoices() {
+        return patientService.getMyInvoices();
+    }
+
     @PostMapping("/appointments")
     public AppointmentDTO createAppointment(@RequestBody @Valid AppointmentRequestDTO appointmentRequestDTO) {
         return appointmentService.createAppointment(appointmentRequestDTO);
@@ -58,6 +64,12 @@ public class PatientController {
     @PostMapping("/create")
     public ResponseEntity<PatientDTO> createPatient(@RequestBody @Valid PatientDTO patientDTO) {
         return ResponseEntity.ok(patientService.create(patientDTO));
+    }
+
+    @DeleteMapping("/appointments/{id}/cancel")
+    public ResponseEntity<String> cancelAppointment(@PathVariable Long id) {
+        appointmentService.deleteAppointment(id);
+        return ResponseEntity.ok(" Qabulingiz muvaffaqiyatli bekor qilindi ☺️");
     }
 
 }

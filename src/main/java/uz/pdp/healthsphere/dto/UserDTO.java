@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import uz.pdp.healthsphere.enums.RoleEnum;
+import uz.pdp.healthsphere.enums.ToggleStatus;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -42,4 +43,6 @@ public class UserDTO implements Serializable {
     private RoleEnum role;
 
     private String token;
+
+    private ToggleStatus toggleStatus;
 }
