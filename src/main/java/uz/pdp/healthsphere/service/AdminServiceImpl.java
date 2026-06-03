@@ -15,6 +15,8 @@ import uz.pdp.healthsphere.exceptions.EntityAlreadyException;
 import uz.pdp.healthsphere.mapper.UserMapper;
 import uz.pdp.healthsphere.repository.UserRepository;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class AdminServiceImpl implements AdminService {
@@ -69,6 +71,14 @@ public class AdminServiceImpl implements AdminService {
         userRepository.save(user);
 
         return userMapper.toDTO(user);
+    }
+
+    @Override
+    public List<UserDTO> getAllUsers() {
+
+        List<User> users = userRepository.findAll();
+
+        return userMapper.toDTO(users);
     }
 
 }

@@ -43,6 +43,11 @@ public class AdminController {
         return reportService.performance(status);
     }
 
+    @GetMapping("/users/all")
+    public List<UserDTO> getAllUsers() {
+        return adminService.getAllUsers();
+    }
+
     @PostMapping("/create-staff")
     public ResponseEntity<UserDTO> createStaff(@RequestBody @Valid StaffCreateDTO staffCreateDTO) {
         return ResponseEntity.ok(adminService.createStaff(staffCreateDTO));
