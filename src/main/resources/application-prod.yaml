@@ -32,3 +32,7 @@ server:
 myapp:
   secret-key: ${SECRET_KEY}
   upload-path: ${UPLOAD_PATH}
+gemini:
+  api:
+    key: ${GEMINI_API_KEY}
+    url: ${GEMINI_API_URL}
