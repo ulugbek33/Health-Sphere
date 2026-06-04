@@ -3,3 +3,7 @@ spring:
     name: Health-Sphere
   profiles:
     active: prod
+gemini:
+  api:
+    key: "AQ.Ab8RN6J_zREQdwkOrhQ7q8T9aLR92jtmMe9ZXI1TXgcaoz9rqA"
+    url: "https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key="

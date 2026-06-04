@@ -1,6 +1,7 @@
 package uz.pdp.healthsphere.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -34,5 +35,6 @@ public class DoctorScheduleDTO implements Serializable {
 
     private DayOfWeekEnum dayOfWeek;
 
+    @JsonIgnore
     private Long doctorId;
 }

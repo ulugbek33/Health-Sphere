@@ -53,4 +53,6 @@ public interface DoctorRepository extends JpaRepository<Doctor, Long> {
     List<DoctorPerformanceDTO> getDoctorPerformance(@Param("status") StatusEnum status);
 
     boolean existsByUserId(Long userId);
+
+    List<Doctor> findAllBySpecializationNameIgnoreCase(String name);
 }
