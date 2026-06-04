@@ -2,6 +2,10 @@ package uz.pdp.healthsphere.service.ai;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -21,6 +25,7 @@ public class AIService {
 
     private final RestTemplate restTemplate = new RestTemplate();
 
+    @Cacheable(value = "symptoms", key = "#userSymptoms")
     public String analyzeSymptoms(String userSymptoms) {
         // Prompt (Ko'rsatma)
         String prompt = "Sen tajribali tibbiy diagnostika yordamchisan. " +

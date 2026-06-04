@@ -35,7 +35,12 @@ server:
 myapp:
   secret-key: c0388696-55b0-479c-a142-a2ae7cbe269a
   upload-path: C:\\Users\\HP ENVY\\uploads
-gemini:
-  api:
-    key: ${GEMINI_API_KEY}
-    url: ${GEMINI_API_URL}
+#gemini:
+#  api:
+#    key: ${GEMINI_API_KEY}
+#    url: ${GEMINI_API_URL}
+ai:
+  groq:
+    key: ${GROQ_API_KEY}
+    url: ${GROQ_API_URL}
+    model: llama-3.1-8b-instant
